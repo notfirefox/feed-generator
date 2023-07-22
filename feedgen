@@ -21,8 +21,7 @@ do
   [ -f "$file" ] || break
   ENTRY_TITLE=$(grep "<h1>" "$file"    |
                 grep -v "$FEED_AUTHOR" |
-                sed -e 's/<[^>]*>//g'  |
-                awk '{$1=$1};1')
+                sed -e 's/\s*<[^>]*>//g')
   ENTRY_LINK="$FEED_LINK$(basename "$file")"
   ENTRY_ID="urn:uuid:$(uuidgen -sn @url -N "$ENTRY_LINK")"
   ENTRY_UPDATED=$(date -r "$file" '+%FT%TZ')
