@@ -5,5 +5,5 @@ Feed generator for simple websites.
 Find the desired `html` files using `find` and then pipe
 them into `feedgen`.
 ```sh
-find ... | feedgen
+feedgen > feed.atom
 ```

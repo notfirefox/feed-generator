@@ -1,0 +1,43 @@
+#!/bin/sh
+
+FEED_TITLE="Website"
+FEED_AUTHOR="notfirefox"
+FEED_UPDATED=$(date -u '+%FT%TZ')
+FEED_LINK="https://notfirefox.github.io/"
+ENTRIES_FOLDER="$HOME/Development/notfirefox.github.io/content"
+
+cat << EOF
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>$FEED_TITLE</title>
+  <author>
+    <name>$FEED_AUTHOR</name>
+  </author>
+  <updated>$FEED_UPDATED</updated>
+  <link>$FEED_LINK</link>
+EOF
+
+for file in "$ENTRIES_FOLDER"/*.html
+do
+  ENTRY_URL="$FEED_LINK$(basename "$file")"
+  ENTRY_TITLE=$(grep "<h1>*" "$file" | 
+                grep -v "$FEED_AUTHOR" | 
+                sed -e 's/<[^>]*>//g' | 
+                awk '{$1=$1};1')
+  ENTRY_UPDATED=$(date -r "$file" '+%FT%TZ')
+  ENTRY_ID="urn:uuid:$(uuidgen --sha1 --namespace @url --name "$ENTRY_URL")"
+  ENTRY_SUMMARY="Some text."
+
+cat << EOF
+  <entry>
+    <title>$ENTRY_TITLE</title>
+    <updated>$ENTRY_UPDATED</updated>
+    <id>$ENTRY_ID</id>
+    <summary>$ENTRY_SUMMARY</summary>
+  </entry>
+EOF
+done
+
+cat << EOF
+</feed>
+EOF

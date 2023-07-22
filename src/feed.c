@@ -5,37 +5,24 @@
 #include <string.h>
 #include <unistd.h>
 
-// ------------------------- CONSTANTS ---------------------------------
-
 enum { MAX_LEN = 65536 };
 
-// ------------------- PRIVATE IMPLEMENTATION --------------------------
-
-// if the unix stdout is being redirected into a file
-// we return true otherwise false. `file` is the result
-static bool find_feed(char *const file, const int size) {
-  if (isatty(1)) {
-    return false;
-  }
-  char path[32];
-  sprintf(path, "/proc/%d/fd/1", getpid());
-  size_t _ = readlink(path, file, size);
-  return access(file, R_OK) == 0;
-}
-
-// ------------------- PUBLIC IMPLEMENTATION ----------------------------
-
 struct entry {
-  // TODO: Implement feed_entry data structure (priority: high)
+  const char *const title;
+  const char *const updated;
+  const char *const id;
+  const char *const summary;
 };
 
 struct feed {
+  const char *const title;
+  const char *const author;
+  const char *const updated;
+  const char *const link;
   struct entry *entries;
-  // TODO: Implement feed data structure (priority: high)
-  ;
+  int size;
 };
 
-// create a new feed object or exit if malloc failed
 struct feed *const create_feed() {
   struct feed *feed = malloc(sizeof(struct feed));
   if (feed == NULL) {
@@ -43,22 +30,21 @@ struct feed *const create_feed() {
     exit(EXIT_FAILURE);
     return NULL;
   }
-  char file[MAX_LEN];
-  if (find_feed(file, MAX_LEN)) {
-    // TODO: Initialize feed using existing feed file (priority: low)
-    // NOTE: This may initialize everything except for the entries itself
-    ;
-  }
+  const struct feed temp = {"TITLE_PLACEHOLDER",
+                            "AUTHOR_PLACEHOLDER",
+                            "UPDATED_PLACEHOLDER",
+                            "LINK_PLACEHOLDER",
+                            NULL,
+                            0};
+  memcpy(feed, &temp, sizeof(struct feed));
   return feed;
 }
 
-// read information from unix stdin
-// process that information and then
-// and write it into the feed data structure
 void populate_feed(struct feed *const feed) {
   char input[MAX_LEN];
   if (isatty(fileno(stdin))) {
     printf("Usage: find content/ -print | feedgen\n");
+    exit(EXIT_SUCCESS);
     return;
   }
   int i = 0;
@@ -69,7 +55,7 @@ void populate_feed(struct feed *const feed) {
   const char delimiter[] = "\n";
   char *word = strtok(input, delimiter);
   while (word != NULL) {
-    printf("%s\n", word);
+    // printf("%s\n", word);
     // TODO: Implement populate_feed (priority: high)
     ;
 
@@ -77,17 +63,31 @@ void populate_feed(struct feed *const feed) {
   }
 }
 
-// write data from feed struct into output stream
 void write_feed(const struct feed *const feed) {
-  // TODO: Implement write_feed function (priority: high)
-  ;
+  printf("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n");
+  printf("<feed xmlns=\"http://www.w3.org/2005/Atom\">\n");
+
+  printf("  <title>%s</title>\n", feed->title);
+  printf("  <author>\n");
+  printf("    <name>%s</name>\n", feed->author);
+  printf("  </author>\n");
+  printf("  <updated>%s</updated>\n", feed->updated);
+  printf("  <link>%s</link>\n", feed->link);
+
+  for (int i = 0; i < feed->size; i++) {
+    printf("  <entry>\n");
+    printf("    <title>ENTRY_TITLE</title>\n");
+    printf("    <updated>ENTRY_UPDATED</updated>\n");
+    printf("    <id>ENTRY_ID</id>\n");
+    printf("    <summary>ENTRY_SUMMARY</summary>\n");
+    printf("  </entry>\n");
+  }
+
+  printf("</feed>\n");
 }
 
-// delete an existing feed object
 void delete_feed(struct feed *feed) {
   if (feed != NULL) {
-    // TODO: Update the implementation of delete_feed (priority: moderate)
-    ;
     free(feed);
   }
 }
