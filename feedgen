@@ -4,7 +4,6 @@ FEED_TITLE="Website"
 FEED_AUTHOR="notfirefox"
 FEED_UPDATED=$(date -u '+%FT%TZ')
 FEED_LINK="https://notfirefox.github.io/"
-ENTRIES_FOLDER="$HOME/Development/notfirefox.github.io/content"
 
 cat << EOF
 <?xml version="1.0" encoding="utf-8"?>
@@ -17,7 +16,7 @@ cat << EOF
   <link>$FEED_LINK</link>
 EOF
 
-for file in "$ENTRIES_FOLDER"/*.html
+for file in $(find . -type f -name "*.html" | grep -v "./index.html")
 do
   ENTRY_URL="$FEED_LINK$(basename "$file")"
   ENTRY_TITLE=$(grep "<h1>*" "$file"   | 
