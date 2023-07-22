@@ -38,4 +38,6 @@ cat << EOF
 EOF
 done
 
-echo "</feed>"
+cat << EOF
+</feed>
+EOF
