@@ -16,8 +16,9 @@ cat << EOF
   <link>$FEED_LINK</link>
 EOF
 
-for file in $(find . -type f -name "*.html" | grep -v "./index.html")
+for file in content/*.html
 do
+  [ -f "$file" ] || break
   ENTRY_TITLE=$(grep "<h1>*" "$file"   | 
                 grep -v "$FEED_AUTHOR" | 
                 sed -e 's/<[^>]*>//g'  | 
