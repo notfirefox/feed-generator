@@ -30,8 +30,9 @@ do
 cat << EOF
   <entry>
     <title>$ENTRY_TITLE</title>
-    <updated>$ENTRY_UPDATED</updated>
+    <link href="$ENTRY_LINK"/>
     <id>$ENTRY_ID</id>
+    <updated>$ENTRY_UPDATED</updated>
     <summary>$ENTRY_SUMMARY</summary>
   </entry>
 EOF
