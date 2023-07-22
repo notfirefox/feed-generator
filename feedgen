@@ -24,7 +24,7 @@ do
                 sed -e 's/<[^>]*>//g'  | 
                 awk '{$1=$1};1')
   ENTRY_LINK="$FEED_LINK$(basename "$file")"
-  ENTRY_ID="urn:uuid:$(uuidgen --sha1 --namespace @url --name "$ENTRY_LINK")"
+  ENTRY_ID="urn:uuid:$(uuidgen -sn @url -N "$ENTRY_LINK")"
   ENTRY_UPDATED=$(date -r "$file" '+%FT%TZ')
   ENTRY_SUMMARY="Some text."
 
