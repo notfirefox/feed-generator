@@ -19,7 +19,7 @@ EOF
 for file in content/*.html
 do
   [ -f "$file" ] || break
-  ENTRY_TITLE=$(grep -Fm2 "<h1>" "$file" | tail -n1 | 
+  ENTRY_TITLE=$(grep -Fm2 "<h1>" "$file" | tail -n1 |
                 sed -e 's/\s*<[^>]*>//g')
   ENTRY_LINK="$FEED_LINK$(basename "$file")"
   ENTRY_ID="urn:uuid:$(uuidgen -sn @url -N "$ENTRY_LINK")"
