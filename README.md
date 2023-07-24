@@ -1,2 +1,2 @@
 # Feed Generator
-Feed generator for simple websites.
+[Untested] Feed generator for simple websites.
